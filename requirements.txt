@@ -1,0 +1,4 @@
+websocket-client
+pandas
+gspread
+google-auth
