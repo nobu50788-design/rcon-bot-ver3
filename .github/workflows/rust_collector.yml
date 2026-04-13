@@ -1,0 +1,31 @@
+name: Rust Player Info Collector
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # 手動実行用
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run collector
+        env:
+          RCON_SERVER_IP: ${{ secrets.RCON_SERVER_IP }}
+          RCON_PORT: ${{ secrets.RCON_PORT }}
+          RCON_PASS: ${{ secrets.RCON_PASS }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        run: python main.py
